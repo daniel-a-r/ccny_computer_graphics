@@ -94,8 +94,22 @@ HW1a::resizeGL(int w, int h)
        ymax = 1/ar;
     }
 
-    // set viewport to occupy full canvas
-    glViewport(0, 0, w, h);
+    // set viewports
+    //bottom row
+    glViewport(0, 0, w/3, h/3);
+    glViewport(w/3, 0, w/3, h/3);
+    glViewport((2*w)/3, 0, w/3, h/3);
+
+    //center row
+    glViewport(0, h/3, w/3, h/3);
+    glViewport(w/3, h/3, w/3, h/3);
+    glViewport((2*w)/3, h/3, w/3, h/3);
+
+    //top row
+    glViewport(0, (2*h)/3, w/3, h/3);
+    glViewport(w/3, (2*h)/3, w/3, h/3);
+    glViewport((2*w)/3, (2*h)/3, w/3, h/3);
+
 
     // init viewing coordinates for orthographic projection
     glMatrixMode(GL_PROJECTION);
@@ -118,9 +132,6 @@ HW1a::paintGL()
 	// PUT YOUR CODE HERE
     // clear canvas with background values
     glClear(GL_COLOR_BUFFER_BIT);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 
     //left bottom P
     glBegin(GL_POINTS);
@@ -184,9 +195,6 @@ HW1a::paintGL()
         glVertex2f(Vertices[8]*.325+.875, Vertices[9]*.325);
         glVertex2f(Vertices[10]*.325+.875, Vertices[11]*.325);
         glVertex2f(Vertices[12]*.325+.875, Vertices[13]*.325);
-        // glVertex2f(Vertices[14]*.325+.875, Vertices[15]*.325);
-        // glVertex2f(-0.3125f*.325+.875, 0.5625f*.325);
-        //glVertex2f(Vertices[8]*.325+.875, Vertices[9]*.325);
      glEnd();
      glBegin(GL_POLYGON);
         glVertex2f(Vertices[10]*.325+.875, Vertices[11]*.325);
@@ -240,3 +248,4 @@ HW1a::controlPanel()
 
 	return(groupBox);
 }
+
