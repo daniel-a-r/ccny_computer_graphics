@@ -366,4 +366,3 @@ HW1b::changeTwist(int twist)
 	initBuffers();
 	updateGL();
 }
-

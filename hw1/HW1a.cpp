@@ -83,6 +83,10 @@ void
 HW1a::resizeGL(int w, int h)
 {
 	// PUT YOUR CODE HERE
+    // save window dimensions
+	m_winW = w;
+	m_winH = h;
+
     // compute aspect ratio
     float xmax, ymax;
     float ar = (float) w / h;
@@ -95,21 +99,8 @@ HW1a::resizeGL(int w, int h)
     }
 
     // set viewports
-    //bottom row
-    glViewport(0, 0, w/3, h/3);
-    glViewport(w/3, 0, w/3, h/3);
-    glViewport((2*w)/3, 0, w/3, h/3);
-
-    //center row
-    glViewport(0, h/3, w/3, h/3);
-    glViewport(w/3, h/3, w/3, h/3);
-    glViewport((2*w)/3, h/3, w/3, h/3);
-
-    //top row
-    glViewport(0, (2*h)/3, w/3, h/3);
-    glViewport(w/3, (2*h)/3, w/3, h/3);
-    glViewport((2*w)/3, (2*h)/3, w/3, h/3);
-
+    glViewport(0, 0, w, h);
+    
 
     // init viewing coordinates for orthographic projection
     glMatrixMode(GL_PROJECTION);
@@ -133,104 +124,19 @@ HW1a::paintGL()
     // clear canvas with background values
     glClear(GL_COLOR_BUFFER_BIT);
 
-    //left bottom P
-    glBegin(GL_POINTS);
-       for(int i=0; i<32; i+=2){
-           glVertex2f(Vertices[i]*.325-.875, Vertices[i+1]*.325-.675);
-       }
-    glEnd();
+    // viewport dimensions
+	int w = m_winW / 3;
+	int h = m_winH / 3;
 
-    //left middle P
-    glBegin(GL_LINE_LOOP);
-       for(int i=0; i<32; i+=2){
-           glVertex2f(Vertices[i]*.325-.875, Vertices[i+1]*.325);
-       }
-    glEnd();
-
-    //left top P
-    glBegin(GL_POLYGON);
-       for(int i=0; i<32; i+=2){
-           glVertex2f(Vertices[i]*.325-.875, Vertices[i+1]*.325+.675);
-       }
-    glEnd();
-
-    //center middle P
-    glBegin(GL_POLYGON);
-       glVertex2f(Vertices[18]*.325, Vertices[19]*.325);
-       glVertex2f(Vertices[20]*.325, Vertices[21]*.325);
-       glVertex2f(Vertices[22]*.325, Vertices[23]*.325);
-    glEnd();
-
-    //center top P
-    glBegin(GL_POLYGON);
-        glVertex2f(Vertices[8]*.325, Vertices[9]*.325+.675);
-        glVertex2f(Vertices[10]*.325, Vertices[11]*.325+.675);
-        glVertex2f(Vertices[12]*.325, Vertices[13]*.325+.675);
-        glVertex2f(Vertices[14]*.325, Vertices[15]*.325+.675);
-    glEnd();
-    glBegin(GL_POLYGON);
-        glVertex2f(Vertices[16]*.325, Vertices[17]*.325+.675);
-        glVertex2f(Vertices[18]*.325, Vertices[19]*.325+.675);
-        glVertex2f(Vertices[20]*.325, Vertices[21]*.325+.675);
-        glVertex2f(Vertices[22]*.325, Vertices[23]*.325+.675);
-    glEnd();
-
-    //center bottom p
-    glBegin(GL_LINES);
-        for(int i=0; i<32; i+=4){
-            glVertex2f(Vertices[i]*.325, Vertices[i+1]*.325-.675);
-            glVertex2f(Vertices[i+2]*.325, Vertices[i+3]*.325-.675);
-        }
-    glEnd();
-
-    //right top P
-    glBegin(GL_POLYGON);
-       for(int i=0; i<32; i+=2){
-           glVertex2f(Vertices[i]*.325+.875, Vertices[i+1]*.325+.675);
-       }
-    glEnd();
-
-    //right middle P
-    glBegin(GL_POLYGON);
-        glVertex2f(Vertices[8]*.325+.875, Vertices[9]*.325);
-        glVertex2f(Vertices[10]*.325+.875, Vertices[11]*.325);
-        glVertex2f(Vertices[12]*.325+.875, Vertices[13]*.325);
-     glEnd();
-     glBegin(GL_POLYGON);
-        glVertex2f(Vertices[10]*.325+.875, Vertices[11]*.325);
-        glVertex2f(Vertices[12]*.325+.875, Vertices[13]*.325);
-        glVertex2f(Vertices[14]*.325+.875, Vertices[15]*.325);
-     glEnd();
-     glBegin(GL_POLYGON);
-        glVertex2f(Vertices[16]*.325+.875, Vertices[17]*.325);
-        glVertex2f(Vertices[18]*.325+.875, Vertices[19]*.325);
-        glVertex2f(Vertices[20]*.325+.875, Vertices[21]*.325);
-     glEnd();
-     glBegin(GL_POLYGON);
-        glVertex2f(Vertices[18]*.325+.875, Vertices[19]*.325);
-        glVertex2f(Vertices[20]*.325+.875, Vertices[21]*.325);
-        glVertex2f(Vertices[22]*.325+.875, Vertices[23]*.325);
-     glEnd();
-     glBegin(GL_POLYGON);
-        glVertex2f(Vertices[20]*.325+.875, Vertices[21]*.325);
-        glVertex2f(Vertices[22]*.325+.875, Vertices[23]*.325);
-        glVertex2f(Vertices[24]*.325+.875, Vertices[25]*.325);
-     glEnd();
-     glBegin(GL_POLYGON);
-        glVertex2f(Vertices[22]*.325+.875, Vertices[23]*.325);
-        glVertex2f(Vertices[24]*.325+.875, Vertices[25]*.325);
-        glVertex2f(Vertices[26]*.325+.875, Vertices[27]*.325);
-     glEnd();
-
-    //right bottom p
-    glBegin(GL_LINE_STRIP);
-        for(int i=0; i<32; i+=4){
-            glVertex2f(Vertices[i]*.325+.875, Vertices[i+1]*.325-.675);
-            glVertex2f(Vertices[i+2]*.325+.875, Vertices[i+3]*.325-.675);
-        }
-    glEnd();
-    glFlush();
-
+	for(int i=0; i<9; i++){
+		glViewport((i%3)*w, (i/3)*h, w, h);
+		
+        glBegin(DrawModes[i]);
+           for(int j=0; j<32; j=j+2){
+               glVertex2f(Vertices[j], Vertices[j+1]);
+           }
+        glEnd();
+	} 
 }
 
 
@@ -248,4 +154,3 @@ HW1a::controlPanel()
 
 	return(groupBox);
 }
-
